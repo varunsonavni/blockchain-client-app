@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  # Blockchain client service connecting to Polygon network
+  blockchain-client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blockchain-client
+    ports:
+      - "8080:8080" 
+    volumes:
+      - /tmp/blockchain-client:/app/logs 
+    restart: unless-stopped 
+    healthcheck: 
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/api/blocks/latest"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s 
